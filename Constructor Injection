@@ -1,0 +1,149 @@
+//pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.springcore</groupId>
+  <artifactId>constructorinjection</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+   <dependencies>
+    <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>4.3.10.RELEASE</version>
+	</dependency>
+
+   </dependencies>
+  
+</project>
+
+
+//Customer.java
+
+package com.spring.app;
+
+public class Customer {
+    private int custId;
+    private String custName;
+    private String emailId;
+    private long contactNo;
+    
+    public Customer(int custId,String custName,String emailId,long contactNo){
+        this.custId = custId;
+        this.custName = custName;
+        this.emailId = emailId;
+        this.contactNo = contactNo;
+    }
+    
+    public int getCustId() {
+			return custId;
+		}
+		public void setCustId(int custId) {
+			this.custId = custId;
+		}
+		public String getCustName() {
+			return custName;
+		}
+		public void setCustName(String custName) {
+			this.custName = custName;
+		}
+		public String getEmailId() {
+			return emailId;
+		}
+		public void setEmailId(String emailId) {
+			this.emailId = emailId;
+		}
+		public long getContactNo() {
+			return contactNo;
+		}
+		public void setContactNo(long contactNo) {
+			this.contactNo = contactNo;
+		}
+	
+	 	  	    	    	     	      	 	
+}
+
+
+
+//Driver.java
+
+package com.spring.app;
+
+public class Driver {
+	
+public static void main(String[] args)
+    {
+    
+    }
+
+}
+
+
+
+//Membership.java
+
+package com.spring.app;
+
+public class MemberShip {
+	private int membershipId;
+	private String membershipType;
+	private int visitsPerYear;
+	private Customer customer;
+	
+	public MemberShip(int membershipId,String membershipType,int visitsPerYear,Customer customer){
+	    this.membershipId = membershipId;
+	    this.membershipType = membershipType;
+	    this.visitsPerYear = visitsPerYear;
+	    this.customer = customer;
+	}
+	
+	public int getMembershipId() {
+		return membershipId;
+	}
+	public void setMembershipId(int membershipId) {
+		this.membershipId = membershipId;
+	}
+	public String getMembershipType() {
+		return membershipType;
+	}
+	public void setMembershipType(String membershipType) {
+		this.membershipType = membershipType;
+	}
+	public int getVisitsPerYear() {
+		return visitsPerYear;
+	}
+	public void setVisitsPerYear(int visitsPerYear) {
+		this.visitsPerYear = visitsPerYear;
+	}
+	public Customer getCustomer() {
+		return customer;
+	}
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+}	 	  	    	    	     	      	 	
+
+
+//application context.xml
+
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+      <bean id="custObj" class="com.spring.app.Customer">
+      <constructor-arg type="int" value="1"/>
+      <constructor-arg type="java.lang.String" value="abc"/>
+      <constructor-arg type="java.lang.String" value="fthjn@gmail.com@gmail.com"/>
+      <constructor-arg type="int" value="9876543210"/>
+  </bean>
+  <bean id="membership" class="com.spring.app.MemberShip">
+      <constructor-arg type="int" value="1"/>
+      <constructor-arg type="java.lang.String" value="Gold"/>
+      <constructor-arg type="int" value="4"/>
+      <constructor-arg ref="custObj"/>
+  </bean>
+    
+  
+</beans>
