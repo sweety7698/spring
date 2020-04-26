@@ -1,0 +1,99 @@
+//pom.xml
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.springcore</groupId>
+  <artifactId>DebitCard-Annotation</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+     <dependencies>     	
+	<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>4.3.10.RELEASE</version>
+	</dependency>     	
+     </dependencies>
+  
+</project>
+
+
+//CurrencyConverter.java
+
+package com.spring.app;
+import java.util.Map;
+
+public class CurrencyConverter {
+    private Map<String,String> mObj;
+    
+    public Map<String,String> getmObj() {
+		return mObj;
+	}
+	public void setmObj(Map<String,String> mObj) {
+		this.mObj = mObj;
+	}     
+	 public int getTotalCurrencyValue(String value)
+    {
+        StringBuffer currency=new StringBuffer();
+        StringBuffer name=new StringBuffer();
+        int result=0;
+        
+        for (int i = 0; i < value.length(); i++) {
+			if (Character.isDigit(value.charAt(i)))
+				currency.append(value.charAt(i));
+			else if (Character.isAlphabetic(value.charAt(i)))
+				name.append(value.charAt(i));
+		}
+		String str = currency.toString();
+		String currency_name = name.toString();
+		currency_name = currency_name.toUpperCase();
+		int total_currency = Integer.parseInt(str);
+		
+		if (getmObj().containsKey(currency_name)) {
+			result = total_currency * Integer.parseInt(getmObj().get(currency_name));
+		}
+		return result;		
+	 }			    	    	     	      	 
+}
+
+
+//Driver.java
+
+
+package com.spring.app;
+import java.util.*;
+//import com.spring.app.CurrencyConverter;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Driver {
+	
+public static void main(String[] args)
+{
+
+    Scanner s=new Scanner(System.in);
+    String value=s.nextLine();
+    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("resources/beans.xml");
+    CurrencyConverter currency=(CurrencyConverter) context.getBean("cc");
+    System.out.println(currency.getTotalCurrencyValue(value));
+	
+}
+}
+
+//beans.xml
+
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	<bean id="cc"
+		class="com.spring.app.CurrencyConverter">
+		<property name="mObj">
+			<map>
+				<entry key="DOLLAR" value="65" />
+				<entry key="EURO" value="80" />
+				<entry key="DINAR" value="218" />
+			</map>
+		</property>
+	</bean>
+</beans>
