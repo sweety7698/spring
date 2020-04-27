@@ -1,0 +1,148 @@
+//pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>DBConfig</groupId>
+  <artifactId>DBConfig</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+    <dependencies>
+     	<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>4.3.10.RELEASE</version>
+	</dependency>
+	</dependencies>
+	
+</project>
+
+
+//Main.java
+
+
+package com.app.driver;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.spring.app.DBConfig;
+import com.spring.app.EmployeeDAO;
+
+public class Main {
+	public static void main(String[] args) {
+
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/beans.xml");
+		EmployeeDAO empdao = (EmployeeDAO) context.getBean("empdao");
+		DBConfig dbConfig = empdao.getDbConfig();
+		System.out.println(dbConfig.getDriverName());
+		System.out.println(dbConfig.getUrl());
+		System.out.println(dbConfig.getUserName());
+		System.out.println(dbConfig.getPassword());
+	}
+}
+
+
+
+//DBConfig.java
+
+
+package com.spring.app;
+
+public class DBConfig {
+	private String driverName;
+	private String url;
+	private String userName;
+	private String password;
+
+	public String getDriverName() {
+		return driverName;
+	}
+
+	public void setDriverName(String driverName) {
+		this.driverName = driverName;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	@Override
+	public String toString() {
+		return "DBConfig [driverName=" + driverName + ", url=" + url + ", userName=" + userName + ", password="
+				+ password + "]";
+	}
+}
+
+
+//EmployeeDAO.java
+
+
+package com.spring.app;
+
+public class EmployeeDAO {
+	private DBConfig dbConfig;
+
+	public DBConfig getDbConfig() {
+		return dbConfig;
+	}
+
+	public void setDbConfig(DBConfig dbConfig) {
+		this.dbConfig = dbConfig;
+	}
+
+	@Override
+	public String toString() {
+		return "EmployeeDAO [dbConfig=" + dbConfig + "]";
+	}
+}
+
+
+//beans.xml
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+	<bean id="db" class="com.spring.app.DBConfig">
+		<property name="driverName" value="oracle.jdbc.driver.OracleDriver">
+		</property>
+		
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:oracle">
+		</property>
+		
+		<property name="userName" value="john">
+		</property>
+		
+		<property name="password" value="john@123">
+		</property>
+	</bean>
+
+	<bean name="empdao" class="com.spring.app.EmployeeDAO">
+		<property name="dbConfig" ref="db" />
+	</bean>
+</beans>
+
